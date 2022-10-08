@@ -1,3 +1,5 @@
+mod fundamentals;
+
 use rand::random;
 use crate::UserRole::{ADMIN, USER};
 use crate::WebSite::URL;
@@ -46,6 +48,39 @@ impl User {
         // Importante no usar unwrap() porque si aquí estuviera así tendría un error en caso de que el Option sea None
         // porque estaría intentando desenvolver un valor que es None, por eso es mejor usar cualquier otro método.
         self.active.unwrap_or_default()
+    }
+}
+
+struct PointGeneric<T, V> {
+    // Use Generic Type
+    x: T,
+    y: V,
+}
+
+// Traits
+struct Human;
+
+struct Cat;
+
+trait Talk {
+    fn say_something(&self) -> String;
+    fn language() -> String {
+        String::from("Not Found")
+    }
+}
+
+impl Talk for Human {
+    fn say_something(&self) -> String {
+        String::from("Hi!")
+    }
+}
+
+impl Talk for Cat {
+    fn say_something(&self) -> String {
+        String::from("Miu!")
+    }
+    fn language() -> String {
+        String::from("Gatuno")
     }
 }
 
@@ -132,6 +167,43 @@ fn main() {
         // (), indica nada, hacer nada
         // _ => ()
     }
+
+    // Generics
+    let _some: Option<u8> = Some(1);
+    let _point = PointGeneric {
+        x: 1.0,
+        y: 1,
+    };
+
+    // Trains -> Rasgo -> Interface
+    let human = Human {};
+    let cat = Cat;
+    println!(">>> human: {}", human.say_something());
+    println!(">>> cat: {}", cat.say_something());
+    println!(">>> human lang: {}", Human::language());
+    println!(">>> cat lang: {}", Cat::language());
+    let age: Option<u8> = Some(21);
+    if age.is_major() {
+        println!("Ok");
+    } else {
+        println!("Not Found")
+    }
+
+    // Trait Debug
+    fundamentals::println_exp();
+}
+
+trait AgeManagement {
+    fn is_major(&self) -> bool;
+}
+
+impl AgeManagement for Option<u8> {
+    fn is_major(&self) -> bool {
+        match self {
+            Some(age) => age > &18,
+            None => false,
+        }
+    }
 }
 
 // Functions snake_case
@@ -148,4 +220,8 @@ fn has_access(role: &UserRole) -> bool {
         USER => false,
         ADMIN => true,
     }
+}
+
+fn _get_area<T, V>(point: PointGeneric<T, V>) -> PointGeneric<T, V> {
+    point
 }
