@@ -1,4 +1,5 @@
 mod fundamentals;
+mod iterators;
 
 use rand::random;
 use crate::UserRole::{ADMIN, USER};
@@ -191,6 +192,9 @@ fn main() {
 
     // Trait Debug
     fundamentals::println_exp();
+
+    // Iterators
+    iterators::iterators();
 }
 
 trait AgeManagement {
