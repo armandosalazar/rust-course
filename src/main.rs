@@ -1,5 +1,6 @@
 mod fundamentals;
 mod iterators;
+mod fundamental_concepts;
 
 use rand::random;
 use crate::UserRole::{ADMIN, USER};
