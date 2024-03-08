@@ -1,32 +1,77 @@
-// @todo - Permitir variables sin usar en todo el archivo
-#![allow(unused_variables)]
-#![allow(unused_imports)]
-#![allow(dead_code)]
+pub mod list;
+pub mod core;
+
+
 #[derive(Debug)]
 struct Node {
-    value: u8,
-    next: Option<Box<Node>>
+    data: u8,
+    next: *mut Node,
 }
-#[derive(Debug)]
+
+impl Node {
+    fn new(data: u8) -> Node {
+        Node {
+            data,
+            next: std::ptr::null_mut(),
+        }
+    }
+}
+
 pub struct LinkedList {
-    head: Option<Box<Node>>
+    head: *mut Node,
 }
 
 impl LinkedList {
     pub fn new() -> LinkedList {
-        LinkedList { head: None }
+        LinkedList {
+            head: std::ptr::null_mut(),
+        }
     }
 
-    pub fn push(&mut self, value: u8) {
-        let node: Node = Node {
-            value: value,
-            next: None
-        };
-        if self.head.is_none() {
-            self.head = Some(Box::new(node));
+    pub fn push(&mut self, data: u8) {
+        if self.head.is_null() {
+            self.head = &mut Node::new(data);
         } else {
-            let current = &mut self.head;
-            print!("{:?}", *current);
+            let mut current = self.head;
+            unsafe {
+                println!("{:?}", *current);
+                while !(*current).next.is_null() {
+                    current = (*current).next;
+                }
+                (*current).next = &mut Node::new(data);
+            }
         }
+    }
+
+    pub fn show(&self) {
+        unsafe {
+            let current = self.head;
+            println!("{:?}", *current);
+        }
+    }
+}
+
+
+pub mod linked_list {
+    pub fn run() {
+        let mut node = Node {
+            data: 1,
+            next: std::ptr::null(),
+        };
+        println!("{:?}", node);
+        node.next = &Node {
+            data: 2,
+            next: std::ptr::null(),
+        };
+
+        unsafe {
+            println!("{:?}", *node.next);
+        }
+    }
+
+    #[derive(Debug)]
+    struct Node {
+        data: i32,
+        next: *const Node,
     }
 }
